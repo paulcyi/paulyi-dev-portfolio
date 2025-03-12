@@ -42,36 +42,8 @@ function App() {
     typeText();
   }, []);
 
-  const handleDownloadResume = async () => {
-    try {
-      setDownloadError(null);
-      
-      // First, get the signed URL for the file
-      const { data: signedUrlData, error: signedUrlError } = await supabase.storage
-        .from('Docs')
-        .createSignedUrl('paul-yi.pdf', 60); // 60 seconds expiry
-
-      if (signedUrlError) {
-        console.error('Signed URL error:', signedUrlError);
-        throw new Error('Failed to generate download URL');
-      }
-
-      if (!signedUrlData?.signedUrl) {
-        throw new Error('No signed URL received');
-      }
-
-      // Create a temporary link and trigger download
-      const link = document.createElement('a');
-      link.href = signedUrlData.signedUrl;
-      link.download = 'paul-yi.pdf';
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-      
-    } catch (error) {
-      console.error('Error downloading resume:', error);
-      setDownloadError('Unable to download resume. Please try again later.');
-    }
+  const handleDownloadResume = () => {
+    window.open('https://ceaxvzgjuscuhxzyhgeq.supabase.co/storage/v1/object/public/Docs/paul-yi.pdf', '_blank');
   };
 
   const fadeIn = {
@@ -85,7 +57,7 @@ function App() {
       {/* Header */}
       <header className="fixed w-full bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm z-50">
         <nav className="container mx-auto px-6 py-4 flex justify-between items-center">
-          <motion.h1 
+          <motion.h1
             className="text-2xl font-bold text-gray-900 dark:text-white"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -104,7 +76,7 @@ function App() {
       {/* Hero Section */}
       <section className="pt-32 pb-20 px-6">
         <div className="container mx-auto max-w-6xl">
-          <motion.div 
+          <motion.div
             className="grid md:grid-cols-2 gap-12 items-center"
             initial="initial"
             animate="animate"
@@ -123,18 +95,18 @@ function App() {
                 Former U.S. Army Infantryman turned DevOps Engineer, bringing military precision and leadership to modern tech operations.
               </p>
               <div className="flex gap-4">
-                <a 
-                  href="https://github.com/paulcyi" 
-                  target="_blank" 
+                <a
+                  href="https://github.com/paulcyi"
+                  target="_blank"
                   rel="noopener noreferrer"
                   className="flex items-center gap-2 px-6 py-3 bg-gray-900 dark:bg-white text-white dark:text-gray-900 rounded-lg hover:bg-gray-800 dark:hover:bg-gray-100 transition-colors"
                 >
                   <Github size={20} />
                   GitHub
                 </a>
-                <a 
-                  href="https://linkedin.com/in/paulcyi" 
-                  target="_blank" 
+                <a
+                  href="https://linkedin.com/in/paulcyi"
+                  target="_blank"
                   rel="noopener noreferrer"
                   className="flex items-center gap-2 px-6 py-3 border-2 border-gray-900 dark:border-white text-gray-900 dark:text-white rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
                 >
@@ -144,9 +116,9 @@ function App() {
               </div>
             </div>
             <div className="relative">
-              <img 
-                src="https://images.unsplash.com/photo-1571786256017-aee7a0c009b6?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" 
-                alt="Technological Landscape" 
+              <img
+                src="https://images.unsplash.com/photo-1571786256017-aee7a0c009b6?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80"
+                alt="Technological Landscape"
                 className="rounded-lg shadow-2xl"
               />
             </div>
@@ -157,7 +129,7 @@ function App() {
       {/* Skills Section */}
       <section className="py-20 bg-gray-50 dark:bg-gray-800">
         <div className="container mx-auto px-6 max-w-6xl">
-          <motion.div 
+          <motion.div
             className="grid md:grid-cols-2 lg:grid-cols-4 gap-8"
             initial="initial"
             animate="animate"
@@ -190,7 +162,7 @@ function App() {
       {/* Projects Section */}
       <section className="py-20 px-6">
         <div className="container mx-auto max-w-6xl">
-          <motion.div 
+          <motion.div
             className="mb-12"
             initial="initial"
             animate="animate"
@@ -200,7 +172,7 @@ function App() {
             <p className="text-xl text-gray-600 dark:text-gray-300">Showcasing my journey in DevOps and automation</p>
           </motion.div>
           <div className="grid md:grid-cols-2 gap-8">
-            <motion.div 
+            <motion.div
               className="bg-white dark:bg-gray-800 rounded-lg shadow-lg overflow-hidden"
               whileHover={{ y: -5 }}
             >
@@ -209,8 +181,8 @@ function App() {
                 <p className="text-gray-600 dark:text-gray-300 mb-4">
                   A comprehensive demonstration of AWS DevOps practices including CI/CD pipelines, infrastructure as code, and automated deployments.
                 </p>
-                <a 
-                  href="https://github.com/paulcyi/aws-devops-demo" 
+                <a
+                  href="https://github.com/paulcyi/aws-devops-demo"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="inline-flex items-center text-blue-600 dark:text-blue-400 hover:underline"
@@ -219,7 +191,7 @@ function App() {
                 </a>
               </div>
             </motion.div>
-            <motion.div 
+            <motion.div
               className="bg-white dark:bg-gray-800 rounded-lg shadow-lg overflow-hidden"
               whileHover={{ y: -5 }}
             >
@@ -228,8 +200,8 @@ function App() {
                 <p className="text-gray-600 dark:text-gray-300 mb-4">
                   A serverless application built with AWS Lambda and API Gateway that provides URL shortening functionality with analytics.
                 </p>
-                <a 
-                  href="https://github.com/paulcyi/serverless-url-shortener" 
+                <a
+                  href="https://github.com/paulcyi/serverless-url-shortener"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="inline-flex items-center text-blue-600 dark:text-blue-400 hover:underline"
@@ -245,7 +217,7 @@ function App() {
       {/* Contact Section */}
       <section className="py-20 bg-gray-50 dark:bg-gray-800">
         <div className="container mx-auto px-6 max-w-6xl">
-          <motion.div 
+          <motion.div
             className="text-center mb-12"
             initial="initial"
             animate="animate"
@@ -263,14 +235,14 @@ function App() {
               animate="animate"
               variants={fadeIn}
             >
-              <a 
+              <a
                 href="mailto:contact@paulyi.dev"
                 className="w-full sm:w-[200px] flex items-center justify-center gap-2 px-6 py-3 bg-gray-900 dark:bg-white text-white dark:text-gray-900 rounded-lg hover:bg-gray-800 dark:hover:bg-gray-100 transition-colors"
               >
                 <Mail size={20} />
                 Email Me
               </a>
-              <button 
+              <button
                 onClick={handleDownloadResume}
                 className="w-full sm:w-[200px] flex items-center justify-center gap-2 px-6 py-3 border-2 border-gray-900 dark:border-white text-gray-900 dark:text-white rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
               >
