@@ -1,0 +1,658 @@
+This file is a merged representation of the entire codebase, combined into a single document by Repomix.
+
+================================================================
+File Summary
+================================================================
+
+Purpose:
+--------
+This file contains a packed representation of the entire repository's contents.
+It is designed to be easily consumable by AI systems for analysis, code review,
+or other automated processes.
+
+File Format:
+------------
+The content is organized as follows:
+1. This summary section
+2. Repository information
+3. Directory structure
+4. Multiple file entries, each consisting of:
+  a. A separator line (================)
+  b. The file path (File: path/to/file)
+  c. Another separator line
+  d. The full contents of the file
+  e. A blank line
+
+Usage Guidelines:
+-----------------
+- This file should be treated as read-only. Any changes should be made to the
+  original repository files, not this packed version.
+- When processing this file, use the file path to distinguish
+  between different files in the repository.
+- Be aware that this file may contain sensitive information. Handle it with
+  the same level of security as you would the original repository.
+
+Notes:
+------
+- Some files may have been excluded based on .gitignore rules and Repomix's configuration
+- Binary files are not included in this packed representation. Please refer to the Repository Structure section for a complete list of file paths, including binary files
+- Files matching patterns in .gitignore are excluded
+- Files matching default ignore patterns are excluded
+
+Additional Info:
+----------------
+
+================================================================
+Directory Structure
+================================================================
+.bolt/
+  config.json
+  prompt
+src/
+  lib/
+    supabase.ts
+  App.tsx
+  index.css
+  main.tsx
+  vite-env.d.ts
+.gitignore
+eslint.config.js
+index.html
+package.json
+postcss.config.js
+tailwind.config.js
+tsconfig.app.json
+tsconfig.json
+tsconfig.node.json
+vite.config.ts
+
+================================================================
+Files
+================================================================
+
+================
+File: .bolt/config.json
+================
+{
+  "template": "bolt-vite-react-ts"
+}
+
+================
+File: .bolt/prompt
+================
+For all designs I ask you to make, have them be beautiful, not cookie cutter. Make webpages that are fully featured and worthy for production.
+
+By default, this template supports JSX syntax with Tailwind CSS classes, React hooks, and Lucide React for icons. Do not install other packages for UI themes, icons, etc unless absolutely necessary or I request them.
+
+Use icons from lucide-react for logos.
+
+Use stock photos from unsplash where appropriate, only valid URLs you know exist. Do not download the images, only link to them in image tags.
+
+================
+File: src/lib/supabase.ts
+================
+import { createClient } from '@supabase/supabase-js';
+
+const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
+
+export const supabase = createClient(supabaseUrl, supabaseAnonKey);
+
+================
+File: src/App.tsx
+================
+import React, { useState, useEffect } from 'react';
+import { motion, useAnimationControls } from 'framer-motion';
+import { Sun, Moon, Github, Linkedin, Terminal, Shield, Server, Code2, ExternalLink, Download, Mail } from 'lucide-react';
+import { supabase } from './lib/supabase';
+
+function App() {
+  const [darkMode, setDarkMode] = useState(false);
+  const [displayText1, setDisplayText1] = useState('');
+  const [displayText2, setDisplayText2] = useState('');
+  const text1 = "From Infantry to";
+  const text2 = "Infrastructure.";
+  const [downloadError, setDownloadError] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (darkMode) {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
+  }, [darkMode]);
+
+  useEffect(() => {
+    let currentText1 = '';
+    let currentText2 = '';
+    let currentIndex = 0;
+    const totalLength = text1.length + text2.length;
+
+    const typeText = () => {
+      if (currentIndex < totalLength) {
+        if (currentIndex < text1.length) {
+          currentText1 += text1[currentIndex];
+          setDisplayText1(currentText1);
+        } else {
+          currentText2 += text2[currentIndex - text1.length];
+          setDisplayText2(currentText2);
+        }
+        currentIndex++;
+        setTimeout(typeText, 100);
+      }
+    };
+
+    typeText();
+  }, []);
+
+  const handleDownloadResume = async () => {
+    try {
+      setDownloadError(null);
+      
+      // First, get the signed URL for the file
+      const { data: signedUrlData, error: signedUrlError } = await supabase.storage
+        .from('Docs')
+        .createSignedUrl('paul-yi.pdf', 60); // 60 seconds expiry
+
+      if (signedUrlError) {
+        console.error('Signed URL error:', signedUrlError);
+        throw new Error('Failed to generate download URL');
+      }
+
+      if (!signedUrlData?.signedUrl) {
+        throw new Error('No signed URL received');
+      }
+
+      // Create a temporary link and trigger download
+      const link = document.createElement('a');
+      link.href = signedUrlData.signedUrl;
+      link.download = 'paul-yi.pdf';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      
+    } catch (error) {
+      console.error('Error downloading resume:', error);
+      setDownloadError('Unable to download resume. Please try again later.');
+    }
+  };
+
+  const fadeIn = {
+    initial: { opacity: 0, y: 20 },
+    animate: { opacity: 1, y: 0 },
+    transition: { duration: 0.6 }
+  };
+
+  return (
+    <div className={`min-h-screen bg-white dark:bg-gray-900 transition-colors duration-300`}>
+      {/* Header */}
+      <header className="fixed w-full bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm z-50">
+        <nav className="container mx-auto px-6 py-4 flex justify-between items-center">
+          <motion.h1 
+            className="text-2xl font-bold text-gray-900 dark:text-white"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+          >
+            Paul Yi
+          </motion.h1>
+          <button
+            onClick={() => setDarkMode(!darkMode)}
+            className="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-800 transition-colors"
+          >
+            {darkMode ? <Sun className="text-white" /> : <Moon className="text-gray-900" />}
+          </button>
+        </nav>
+      </header>
+
+      {/* Hero Section */}
+      <section className="pt-32 pb-20 px-6">
+        <div className="container mx-auto max-w-6xl">
+          <motion.div 
+            className="grid md:grid-cols-2 gap-12 items-center"
+            initial="initial"
+            animate="animate"
+            variants={fadeIn}
+          >
+            <div>
+              <h2 className="mb-6">
+                <span className="block text-4xl font-bold text-gray-900 dark:text-white mb-2">
+                  {displayText1}
+                </span>
+                <span className="block text-6xl font-bold text-gray-900 dark:text-white tracking-tight">
+                  {displayText2}
+                </span>
+              </h2>
+              <p className="text-xl text-gray-600 dark:text-gray-300 mb-8">
+                Former U.S. Army Infantryman turned DevOps Engineer, bringing military precision and leadership to modern tech operations.
+              </p>
+              <div className="flex gap-4">
+                <a 
+                  href="https://github.com/paulcyi" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-2 px-6 py-3 bg-gray-900 dark:bg-white text-white dark:text-gray-900 rounded-lg hover:bg-gray-800 dark:hover:bg-gray-100 transition-colors"
+                >
+                  <Github size={20} />
+                  GitHub
+                </a>
+                <a 
+                  href="https://linkedin.com/in/paulcyi" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-2 px-6 py-3 border-2 border-gray-900 dark:border-white text-gray-900 dark:text-white rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+                >
+                  <Linkedin size={20} />
+                  LinkedIn
+                </a>
+              </div>
+            </div>
+            <div className="relative">
+              <img 
+                src="https://images.unsplash.com/photo-1571786256017-aee7a0c009b6?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" 
+                alt="Technological Landscape" 
+                className="rounded-lg shadow-2xl"
+              />
+            </div>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* Skills Section */}
+      <section className="py-20 bg-gray-50 dark:bg-gray-800">
+        <div className="container mx-auto px-6 max-w-6xl">
+          <motion.div 
+            className="grid md:grid-cols-2 lg:grid-cols-4 gap-8"
+            initial="initial"
+            animate="animate"
+            variants={fadeIn}
+          >
+            <div className="p-6 bg-white dark:bg-gray-700 rounded-lg shadow-lg">
+              <Terminal className="w-12 h-12 text-blue-600 mb-4" />
+              <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2">DevOps</h3>
+              <p className="text-gray-600 dark:text-gray-300">CI/CD, Docker, Kubernetes, Jenkins</p>
+            </div>
+            <div className="p-6 bg-white dark:bg-gray-700 rounded-lg shadow-lg">
+              <Shield className="w-12 h-12 text-green-600 mb-4" />
+              <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2">Security</h3>
+              <p className="text-gray-600 dark:text-gray-300">Infrastructure Security, Compliance</p>
+            </div>
+            <div className="p-6 bg-white dark:bg-gray-700 rounded-lg shadow-lg">
+              <Server className="w-12 h-12 text-purple-600 mb-4" />
+              <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2">Infrastructure</h3>
+              <p className="text-gray-600 dark:text-gray-300">AWS, Terraform, Ansible</p>
+            </div>
+            <div className="p-6 bg-white dark:bg-gray-700 rounded-lg shadow-lg">
+              <Code2 className="w-12 h-12 text-red-600 mb-4" />
+              <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2">Automation</h3>
+              <p className="text-gray-600 dark:text-gray-300">Python, Bash, Infrastructure as Code</p>
+            </div>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* Projects Section */}
+      <section className="py-20 px-6">
+        <div className="container mx-auto max-w-6xl">
+          <motion.div 
+            className="mb-12"
+            initial="initial"
+            animate="animate"
+            variants={fadeIn}
+          >
+            <h2 className="text-4xl font-bold text-gray-900 dark:text-white mb-4">Featured Projects</h2>
+            <p className="text-xl text-gray-600 dark:text-gray-300">Showcasing my journey in DevOps and automation</p>
+          </motion.div>
+          <div className="grid md:grid-cols-2 gap-8">
+            <motion.div 
+              className="bg-white dark:bg-gray-800 rounded-lg shadow-lg overflow-hidden"
+              whileHover={{ y: -5 }}
+            >
+              <div className="p-6">
+                <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">AWS DevOps Demo</h3>
+                <p className="text-gray-600 dark:text-gray-300 mb-4">
+                  A comprehensive demonstration of AWS DevOps practices including CI/CD pipelines, infrastructure as code, and automated deployments.
+                </p>
+                <a 
+                  href="https://github.com/paulcyi/aws-devops-demo" 
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center text-blue-600 dark:text-blue-400 hover:underline"
+                >
+                  View Project <ExternalLink size={16} className="ml-2" />
+                </a>
+              </div>
+            </motion.div>
+            <motion.div 
+              className="bg-white dark:bg-gray-800 rounded-lg shadow-lg overflow-hidden"
+              whileHover={{ y: -5 }}
+            >
+              <div className="p-6">
+                <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">Serverless URL Shortener</h3>
+                <p className="text-gray-600 dark:text-gray-300 mb-4">
+                  A serverless application built with AWS Lambda and API Gateway that provides URL shortening functionality with analytics.
+                </p>
+                <a 
+                  href="https://github.com/paulcyi/serverless-url-shortener" 
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center text-blue-600 dark:text-blue-400 hover:underline"
+                >
+                  View Project <ExternalLink size={16} className="ml-2" />
+                </a>
+              </div>
+            </motion.div>
+          </div>
+        </div>
+      </section>
+
+      {/* Contact Section */}
+      <section className="py-20 bg-gray-50 dark:bg-gray-800">
+        <div className="container mx-auto px-6 max-w-6xl">
+          <motion.div 
+            className="text-center mb-12"
+            initial="initial"
+            animate="animate"
+            variants={fadeIn}
+          >
+            <h2 className="text-4xl font-bold text-gray-900 dark:text-white mb-4">Let's Connect</h2>
+            <p className="text-xl text-gray-600 dark:text-gray-300">
+              Currently open to new DevOps Engineering opportunities
+            </p>
+          </motion.div>
+          <div className="flex flex-col items-center gap-6">
+            <motion.div
+              className="flex flex-col sm:flex-row w-full sm:w-auto gap-4"
+              initial="initial"
+              animate="animate"
+              variants={fadeIn}
+            >
+              <a 
+                href="mailto:contact@paulyi.dev"
+                className="w-full sm:w-[200px] flex items-center justify-center gap-2 px-6 py-3 bg-gray-900 dark:bg-white text-white dark:text-gray-900 rounded-lg hover:bg-gray-800 dark:hover:bg-gray-100 transition-colors"
+              >
+                <Mail size={20} />
+                Email Me
+              </a>
+              <button 
+                onClick={handleDownloadResume}
+                className="w-full sm:w-[200px] flex items-center justify-center gap-2 px-6 py-3 border-2 border-gray-900 dark:border-white text-gray-900 dark:text-white rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+              >
+                <Download size={20} />
+                Download Resume
+              </button>
+            </motion.div>
+            {downloadError && (
+              <p className="text-red-500 dark:text-red-400">{downloadError}</p>
+            )}
+          </div>
+        </div>
+      </section>
+
+      {/* Footer */}
+      <footer className="bg-gray-50 dark:bg-gray-800 py-12">
+        <div className="container mx-auto px-6 text-center">
+          <p className="text-gray-600 dark:text-gray-300">
+            © 2025 Paul Yi. All rights reserved.
+          </p>
+        </div>
+      </footer>
+    </div>
+  );
+}
+
+export default App;
+
+================
+File: src/index.css
+================
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+================
+File: src/main.tsx
+================
+import { StrictMode } from 'react';
+import { createRoot } from 'react-dom/client';
+import App from './App.tsx';
+import './index.css';
+
+createRoot(document.getElementById('root')!).render(
+  <StrictMode>
+    <App />
+  </StrictMode>
+);
+
+================
+File: src/vite-env.d.ts
+================
+/// <reference types="vite/client" />
+
+================
+File: .gitignore
+================
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+node_modules
+dist
+dist-ssr
+*.local
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+================
+File: eslint.config.js
+================
+import js from '@eslint/js';
+import globals from 'globals';
+import reactHooks from 'eslint-plugin-react-hooks';
+import reactRefresh from 'eslint-plugin-react-refresh';
+import tseslint from 'typescript-eslint';
+
+export default tseslint.config(
+  { ignores: ['dist'] },
+  {
+    extends: [js.configs.recommended, ...tseslint.configs.recommended],
+    files: ['**/*.{ts,tsx}'],
+    languageOptions: {
+      ecmaVersion: 2020,
+      globals: globals.browser,
+    },
+    plugins: {
+      'react-hooks': reactHooks,
+      'react-refresh': reactRefresh,
+    },
+    rules: {
+      ...reactHooks.configs.recommended.rules,
+      'react-refresh/only-export-components': [
+        'warn',
+        { allowConstantExport: true },
+      ],
+    },
+  }
+);
+
+================
+File: index.html
+================
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Paul Yi - DevOps Engineer</title>
+    <link rel="stylesheet" href="https://rsms.me/inter/inter.css">
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
+
+================
+File: package.json
+================
+{
+  "name": "vite-react-typescript-starter",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "lint": "eslint .",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.39.7",
+    "lucide-react": "^0.344.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "framer-motion": "^11.0.8"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.9.1",
+    "@types/react": "^18.3.5",
+    "@types/react-dom": "^18.3.0",
+    "@vitejs/plugin-react": "^4.3.1",
+    "autoprefixer": "^10.4.18",
+    "eslint": "^9.9.1",
+    "eslint-plugin-react-hooks": "^5.1.0-rc.0",
+    "eslint-plugin-react-refresh": "^0.4.11",
+    "globals": "^15.9.0",
+    "postcss": "^8.4.35",
+    "tailwindcss": "^3.4.1",
+    "typescript": "^5.5.3",
+    "typescript-eslint": "^8.3.0",
+    "vite": "^5.4.2"
+  }
+}
+
+================
+File: postcss.config.js
+================
+export default {
+  plugins: {
+    tailwindcss: {},
+    autoprefixer: {},
+  },
+};
+
+================
+File: tailwind.config.js
+================
+/** @type {import('tailwindcss').Config} */
+export default {
+  content: ['./index.html', './src/**/*.{js,ts,jsx,tsx}'],
+  darkMode: 'class',
+  theme: {
+    extend: {
+      fontFamily: {
+        sans: ['Inter var', 'sans-serif'],
+      },
+    },
+  },
+  plugins: [],
+};
+
+================
+File: tsconfig.app.json
+================
+{
+  "compilerOptions": {
+    "target": "ES2020",
+    "useDefineForClassFields": true,
+    "lib": ["ES2020", "DOM", "DOM.Iterable"],
+    "module": "ESNext",
+    "skipLibCheck": true,
+
+    /* Bundler mode */
+    "moduleResolution": "bundler",
+    "allowImportingTsExtensions": true,
+    "isolatedModules": true,
+    "moduleDetection": "force",
+    "noEmit": true,
+    "jsx": "react-jsx",
+
+    /* Linting */
+    "strict": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noFallthroughCasesInSwitch": true
+  },
+  "include": ["src"]
+}
+
+================
+File: tsconfig.json
+================
+{
+  "files": [],
+  "references": [
+    { "path": "./tsconfig.app.json" },
+    { "path": "./tsconfig.node.json" }
+  ]
+}
+
+================
+File: tsconfig.node.json
+================
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "lib": ["ES2023"],
+    "module": "ESNext",
+    "skipLibCheck": true,
+
+    /* Bundler mode */
+    "moduleResolution": "bundler",
+    "allowImportingTsExtensions": true,
+    "isolatedModules": true,
+    "moduleDetection": "force",
+    "noEmit": true,
+
+    /* Linting */
+    "strict": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noFallthroughCasesInSwitch": true
+  },
+  "include": ["vite.config.ts"]
+}
+
+================
+File: vite.config.ts
+================
+import { defineConfig } from 'vite';
+import react from '@vitejs/plugin-react';
+
+// https://vitejs.dev/config/
+export default defineConfig({
+  plugins: [react()],
+  optimizeDeps: {
+    exclude: ['lucide-react'],
+  },
+});
+
+
+
+================================================================
+End of Codebase
+================================================================

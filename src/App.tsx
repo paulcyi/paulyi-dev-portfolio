@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { motion, useAnimationControls } from 'framer-motion';
 import { Sun, Moon, Github, Linkedin, Terminal, Shield, Server, Code2, ExternalLink, Download, Mail } from 'lucide-react';
 import { supabase } from './lib/supabase';
+import { FaAws, FaDocker, FaPython, FaGithub } from 'react-icons/fa';
+import { SiTerraform, SiGithubactions, SiAmazonapigateway, SiAmazondynamodb, SiAmazons3, SiSonarqube, SiTrivy } from 'react-icons/si';
 
 function App() {
   const [darkMode, setDarkMode] = useState(false);
@@ -52,12 +54,41 @@ function App() {
     transition: { duration: 0.6 }
   };
 
+  const iconHover = {
+    rest: { scale: 1 },
+    hover: { 
+      scale: 1.1,
+      transition: { 
+        type: "spring",
+        stiffness: 400,
+        damping: 10
+      }
+    }
+  };
+
+  const cardHover = {
+    rest: { scale: 1, y: 0 },
+    hover: { scale: 1.02, y: -5, transition: { duration: 0.2 } }
+  };
+
+  const buttonHover = {
+    rest: { scale: 1 },
+    hover: { 
+      scale: 1.05,
+      transition: {
+        type: "spring",
+        stiffness: 400,
+        damping: 10
+      }
+    }
+  };
+
   return (
-    <div className={`min-h-screen bg-white dark:bg-gray-900 transition-colors duration-300`}>
+    <div className={`min-h-screen bg-white dark:bg-[#121212] transition-colors duration-300`}>
       {/* Header */}
-      <header className="fixed w-full bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm z-50">
+      <header className="fixed w-full bg-white/80 dark:bg-[#121212]/80 backdrop-blur-sm z-50">
         <nav className="container mx-auto px-6 py-4 flex justify-between items-center">
-          <motion.h1
+          <motion.h1 
             className="text-2xl font-bold text-gray-900 dark:text-white"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -66,7 +97,7 @@ function App() {
           </motion.h1>
           <button
             onClick={() => setDarkMode(!darkMode)}
-            className="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-800 transition-colors"
+            className="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-[#1E1E1E] transition-colors"
           >
             {darkMode ? <Sun className="text-white" /> : <Moon className="text-gray-900" />}
           </button>
@@ -76,7 +107,7 @@ function App() {
       {/* Hero Section */}
       <section className="pt-32 pb-20 px-6">
         <div className="container mx-auto max-w-6xl">
-          <motion.div
+          <motion.div 
             className="grid md:grid-cols-2 gap-12 items-center"
             initial="initial"
             animate="animate"
@@ -95,30 +126,38 @@ function App() {
                 Former U.S. Army Infantryman turned DevOps Engineer, bringing military precision and leadership to modern tech operations.
               </p>
               <div className="flex gap-4">
-                <a
-                  href="https://github.com/paulcyi"
-                  target="_blank"
+                <motion.a 
+                  href="https://github.com/paulcyi" 
+                  target="_blank" 
                   rel="noopener noreferrer"
-                  className="flex items-center gap-2 px-6 py-3 bg-gray-900 dark:bg-white text-white dark:text-gray-900 rounded-lg hover:bg-gray-800 dark:hover:bg-gray-100 transition-colors"
+                  className="flex items-center gap-2 px-6 py-3 bg-gray-900 dark:bg-white text-white dark:text-[#121212] rounded-lg hover:shadow-lg dark:hover:shadow-white/10 transition-all duration-300"
+                  initial="rest"
+                  whileHover="hover"
+                  animate="rest"
+                  variants={buttonHover}
                 >
                   <Github size={20} />
                   GitHub
-                </a>
-                <a
-                  href="https://linkedin.com/in/paulcyi"
-                  target="_blank"
+                </motion.a>
+                <motion.a 
+                  href="https://linkedin.com/in/paulcyi" 
+                  target="_blank" 
                   rel="noopener noreferrer"
-                  className="flex items-center gap-2 px-6 py-3 border-2 border-gray-900 dark:border-white text-gray-900 dark:text-white rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+                  className="flex items-center gap-2 px-6 py-3 border-2 border-gray-900 dark:border-white text-gray-900 dark:text-white rounded-lg hover:shadow-lg dark:hover:shadow-white/10 transition-all duration-300"
+                  initial="rest"
+                  whileHover="hover"
+                  animate="rest"
+                  variants={buttonHover}
                 >
                   <Linkedin size={20} />
                   LinkedIn
-                </a>
+                </motion.a>
               </div>
             </div>
             <div className="relative">
-              <img
-                src="https://images.unsplash.com/photo-1571786256017-aee7a0c009b6?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80"
-                alt="Technological Landscape"
+              <img 
+                src="https://images.unsplash.com/photo-1571786256017-aee7a0c009b6?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" 
+                alt="Technological Landscape" 
                 className="rounded-lg shadow-2xl"
               />
             </div>
@@ -127,34 +166,35 @@ function App() {
       </section>
 
       {/* Skills Section */}
-      <section className="py-20 bg-gray-50 dark:bg-gray-800">
+      <section className="py-20 bg-gray-50 dark:bg-[#181818]">
         <div className="container mx-auto px-6 max-w-6xl">
-          <motion.div
+          <motion.div 
             className="grid md:grid-cols-2 lg:grid-cols-4 gap-8"
             initial="initial"
             animate="animate"
             variants={fadeIn}
           >
-            <div className="p-6 bg-white dark:bg-gray-700 rounded-lg shadow-lg">
-              <Terminal className="w-12 h-12 text-blue-600 mb-4" />
-              <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2">DevOps</h3>
-              <p className="text-gray-600 dark:text-gray-300">CI/CD, Docker, Kubernetes, Jenkins</p>
-            </div>
-            <div className="p-6 bg-white dark:bg-gray-700 rounded-lg shadow-lg">
-              <Shield className="w-12 h-12 text-green-600 mb-4" />
-              <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2">Security</h3>
-              <p className="text-gray-600 dark:text-gray-300">Infrastructure Security, Compliance</p>
-            </div>
-            <div className="p-6 bg-white dark:bg-gray-700 rounded-lg shadow-lg">
-              <Server className="w-12 h-12 text-purple-600 mb-4" />
-              <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2">Infrastructure</h3>
-              <p className="text-gray-600 dark:text-gray-300">AWS, Terraform, Ansible</p>
-            </div>
-            <div className="p-6 bg-white dark:bg-gray-700 rounded-lg shadow-lg">
-              <Code2 className="w-12 h-12 text-red-600 mb-4" />
-              <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2">Automation</h3>
-              <p className="text-gray-600 dark:text-gray-300">Python, Bash, Infrastructure as Code</p>
-            </div>
+            {[
+              { icon: Terminal, title: "DevOps", desc: "CI/CD, Docker, Kubernetes, Jenkins", color: "text-blue-600" },
+              { icon: Shield, title: "Security", desc: "Infrastructure Security, Compliance", color: "text-green-600" },
+              { icon: Server, title: "Infrastructure", desc: "AWS, Terraform, Ansible", color: "text-purple-600" },
+              { icon: Code2, title: "Automation", desc: "Python, Bash, Infrastructure as Code", color: "text-red-600" }
+            ].map((item, index) => (
+              <motion.div
+                key={index}
+                initial="rest"
+                whileHover="hover"
+                animate="rest"
+                variants={cardHover}
+                className="p-6 bg-white dark:bg-[#1E1E1E] rounded-lg shadow-lg dark:shadow-black/20 dark:border dark:border-[#2C2C2C] hover:dark:bg-[#252525] transition-colors duration-300"
+              >
+                <motion.div variants={iconHover}>
+                  <item.icon className={`w-12 h-12 ${item.color} mb-4`} />
+                </motion.div>
+                <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2">{item.title}</h3>
+                <p className="text-gray-600 dark:text-gray-300">{item.desc}</p>
+              </motion.div>
+            ))}
           </motion.div>
         </div>
       </section>
@@ -162,7 +202,7 @@ function App() {
       {/* Projects Section */}
       <section className="py-20 px-6">
         <div className="container mx-auto max-w-6xl">
-          <motion.div
+          <motion.div 
             className="mb-12"
             initial="initial"
             animate="animate"
@@ -172,52 +212,78 @@ function App() {
             <p className="text-xl text-gray-600 dark:text-gray-300">Showcasing my journey in DevOps and automation</p>
           </motion.div>
           <div className="grid md:grid-cols-2 gap-8">
-            <motion.div
-              className="bg-white dark:bg-gray-800 rounded-lg shadow-lg overflow-hidden"
-              whileHover={{ y: -5 }}
-            >
-              <div className="p-6">
-                <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">AWS DevOps Demo</h3>
-                <p className="text-gray-600 dark:text-gray-300 mb-4">
-                  A comprehensive demonstration of AWS DevOps practices including CI/CD pipelines, infrastructure as code, and automated deployments.
-                </p>
-                <a
-                  href="https://github.com/paulcyi/aws-devops-demo"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center text-blue-600 dark:text-blue-400 hover:underline"
-                >
-                  View Project <ExternalLink size={16} className="ml-2" />
-                </a>
-              </div>
-            </motion.div>
-            <motion.div
-              className="bg-white dark:bg-gray-800 rounded-lg shadow-lg overflow-hidden"
-              whileHover={{ y: -5 }}
-            >
-              <div className="p-6">
-                <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">Serverless URL Shortener</h3>
-                <p className="text-gray-600 dark:text-gray-300 mb-4">
-                  A serverless application built with AWS Lambda and API Gateway that provides URL shortening functionality with analytics.
-                </p>
-                <a
-                  href="https://github.com/paulcyi/serverless-url-shortener"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center text-blue-600 dark:text-blue-400 hover:underline"
-                >
-                  View Project <ExternalLink size={16} className="ml-2" />
-                </a>
-              </div>
-            </motion.div>
+            {[
+              {
+                title: "AWS DevOps Demo",
+                description: "Scalable web app on AWS ECS Fargate with a live DynamoDB hit counter. Demonstrates CI/CD with GitHub Actions, Docker, and Terraform.",
+                icons: [
+                  { Icon: FaAws, color: "#FF9900", title: "AWS" },
+                  { Icon: FaDocker, color: "#2496ED", title: "Docker" },
+                  { Icon: SiGithubactions, color: "#2088FF", title: "GitHub Actions" },
+                  { Icon: FaPython, color: "#3776AB", title: "Python" },
+                  { Icon: SiTerraform, color: "#7B42BC", title: "Terraform" }
+                ],
+                link: "https://github.com/paulcyi/aws-devops-demo"
+              },
+              {
+                title: "Serverless URL Shortener",
+                description: "A serverless application built with AWS Lambda and API Gateway that provides URL shortening functionality with analytics.",
+                icons: [
+                  { Icon: FaAws, color: "#FF9900", title: "AWS Lambda" },
+                  { Icon: SiAmazonapigateway, color: "#FF4F8B", title: "API Gateway" },
+                  { Icon: SiAmazondynamodb, color: "#4053D6", title: "DynamoDB" },
+                  { Icon: SiAmazons3, color: "#569A31", title: "S3" },
+                  { Icon: SiTerraform, color: "#7B42BC", title: "Terraform" },
+                  { Icon: SiGithubactions, color: "#2088FF", title: "GitHub Actions" },
+                  { Icon: SiSonarqube, color: "#4E9BCD", title: "SonarQube" },
+                  { Icon: SiTrivy, color: "#1904DA", title: "Trivy" }
+                ],
+                link: "https://github.com/paulcyi/serverless-url-shortener"
+              }
+            ].map((project, index) => (
+              <motion.div 
+                key={index}
+                className="bg-white dark:bg-[#1E1E1E] rounded-lg shadow-lg dark:shadow-black/20 dark:border dark:border-[#2C2C2C] overflow-hidden h-full hover:dark:bg-[#252525] transition-colors duration-300"
+                initial="rest"
+                whileHover="hover"
+                animate="rest"
+                variants={cardHover}
+              >
+                <div className="p-6 flex flex-col h-full">
+                  <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">{project.title}</h3>
+                  <p className="text-gray-600 dark:text-gray-300 mb-4 flex-grow">{project.description}</p>
+                  <div className="flex flex-wrap gap-3 mb-4 min-h-[32px] items-center">
+                    {project.icons.map((IconItem, i) => (
+                      <motion.div
+                        key={i}
+                        initial="rest"
+                        whileHover="hover"
+                        animate="rest"
+                        variants={iconHover}
+                      >
+                        <IconItem.Icon className="w-8 h-8" style={{ color: IconItem.color }} title={IconItem.title} />
+                      </motion.div>
+                    ))}
+                  </div>
+                  <a 
+                    href={project.link}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 transition-colors duration-300"
+                  >
+                    View Project <ExternalLink size={16} className="ml-2" />
+                  </a>
+                </div>
+              </motion.div>
+            ))}
           </div>
         </div>
       </section>
 
       {/* Contact Section */}
-      <section className="py-20 bg-gray-50 dark:bg-gray-800">
+      <section className="py-20 bg-gray-50 dark:bg-[#181818]">
         <div className="container mx-auto px-6 max-w-6xl">
-          <motion.div
+          <motion.div 
             className="text-center mb-12"
             initial="initial"
             animate="animate"
@@ -235,38 +301,12 @@ function App() {
               animate="animate"
               variants={fadeIn}
             >
-              <a
+              <motion.a 
                 href="mailto:yipaulc@gmail.com"
-                className="w-full sm:w-[200px] flex items-center justify-center gap-2 px-6 py-3 bg-gray-900 dark:bg-white text-white dark:text-gray-900 rounded-lg hover:bg-gray-800 dark:hover:bg-gray-100 transition-colors"
+                className="w-full sm:w-[200px] flex items-center justify-center gap-2 px-6 py-3 bg-gray-900 dark:bg-white text-white dark:text-[#121212] rounded-lg hover:shadow-lg dark:hover:shadow-white/10 transition-all duration-300"
+                initial="rest"
+                whileHover="hover"
+                animate="rest"
+                variants={buttonHover}
               >
                 <Mail size={20} />
-                Email Me
-              </a>
-              <button
-                onClick={handleDownloadResume}
-                className="w-full sm:w-[200px] flex items-center justify-center gap-2 px-6 py-3 border-2 border-gray-900 dark:border-white text-gray-900 dark:text-white rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
-              >
-                <Download size={20} />
-                Download Resume
-              </button>
-            </motion.div>
-            {downloadError && (
-              <p className="text-red-500 dark:text-red-400">{downloadError}</p>
-            )}
-          </div>
-        </div>
-      </section>
-
-      {/* Footer */}
-      <footer className="bg-gray-50 dark:bg-gray-800 py-12">
-        <div className="container mx-auto px-6 text-center">
-          <p className="text-gray-600 dark:text-gray-300">
-            © 2025 Paul Yi. All rights reserved.
-          </p>
-        </div>
-      </footer>
-    </div>
-  );
-}
-
-export default App;
