@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { motion, useAnimationControls } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { Sun, Moon, Github, Linkedin, Terminal, Shield, Server, Code2, ExternalLink, Download, Mail } from 'lucide-react';
 import { supabase } from './lib/supabase';
 import { FaAws, FaDocker, FaPython, FaGithub } from 'react-icons/fa';
@@ -56,29 +56,38 @@ function App() {
 
   const iconHover = {
     rest: { scale: 1 },
-    hover: { 
-      scale: 1.1,
-      transition: { 
+    hover: {
+      scale: 1.05,
+      transition: {
         type: "spring",
-        stiffness: 400,
-        damping: 10
+        stiffness: 500,
+        damping: 25
       }
     }
   };
 
   const cardHover = {
     rest: { scale: 1, y: 0 },
-    hover: { scale: 1.02, y: -5, transition: { duration: 0.2 } }
+    hover: {
+      scale: 1.02,
+      y: -5,
+      transition: {
+        type: "spring",
+        stiffness: 500,
+        damping: 25,
+        duration: 0.2
+      }
+    }
   };
 
   const buttonHover = {
     rest: { scale: 1 },
-    hover: { 
-      scale: 1.05,
+    hover: {
+      scale: 1.02,
       transition: {
         type: "spring",
-        stiffness: 400,
-        damping: 10
+        stiffness: 500,
+        damping: 25
       }
     }
   };
@@ -88,7 +97,7 @@ function App() {
       {/* Header */}
       <header className="fixed w-full bg-white/80 dark:bg-[#121212]/80 backdrop-blur-sm z-50">
         <nav className="container mx-auto px-6 py-4 flex justify-between items-center">
-          <motion.h1 
+          <motion.h1
             className="text-2xl font-bold text-gray-900 dark:text-white"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -107,7 +116,7 @@ function App() {
       {/* Hero Section */}
       <section className="pt-32 pb-20 px-6">
         <div className="container mx-auto max-w-6xl">
-          <motion.div 
+          <motion.div
             className="grid md:grid-cols-2 gap-12 items-center"
             initial="initial"
             animate="animate"
@@ -126,11 +135,11 @@ function App() {
                 Former U.S. Army Infantryman turned DevOps Engineer, bringing military precision and leadership to modern tech operations.
               </p>
               <div className="flex gap-4">
-                <motion.a 
-                  href="https://github.com/paulcyi" 
-                  target="_blank" 
+                <motion.a
+                  href="https://github.com/paulcyi"
+                  target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center gap-2 px-6 py-3 bg-gray-900 dark:bg-white text-white dark:text-[#121212] rounded-lg hover:shadow-lg dark:hover:shadow-white/10 transition-all duration-300"
+                  className="flex items-center gap-2 px-6 py-3 bg-gray-900 dark:bg-white text-white dark:text-[#121212] rounded-lg hover:bg-gray-800 dark:hover:bg-gray-100 transition-colors"
                   initial="rest"
                   whileHover="hover"
                   animate="rest"
@@ -139,11 +148,11 @@ function App() {
                   <Github size={20} />
                   GitHub
                 </motion.a>
-                <motion.a 
-                  href="https://linkedin.com/in/paulcyi" 
-                  target="_blank" 
+                <motion.a
+                  href="https://linkedin.com/in/paulcyi"
+                  target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center gap-2 px-6 py-3 border-2 border-gray-900 dark:border-white text-gray-900 dark:text-white rounded-lg hover:shadow-lg dark:hover:shadow-white/10 transition-all duration-300"
+                  className="flex items-center gap-2 px-6 py-3 border-2 border-gray-900 dark:border-white text-gray-900 dark:text-white rounded-lg hover:bg-gray-100 dark:hover:bg-[#1E1E1E] transition-colors"
                   initial="rest"
                   whileHover="hover"
                   animate="rest"
@@ -155,9 +164,9 @@ function App() {
               </div>
             </div>
             <div className="relative">
-              <img 
-                src="https://images.unsplash.com/photo-1571786256017-aee7a0c009b6?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" 
-                alt="Technological Landscape" 
+              <img
+                src="https://images.unsplash.com/photo-1571786256017-aee7a0c009b6?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80"
+                alt="Technological Landscape"
                 className="rounded-lg shadow-2xl"
               />
             </div>
@@ -168,7 +177,7 @@ function App() {
       {/* Skills Section */}
       <section className="py-20 bg-gray-50 dark:bg-[#181818]">
         <div className="container mx-auto px-6 max-w-6xl">
-          <motion.div 
+          <motion.div
             className="grid md:grid-cols-2 lg:grid-cols-4 gap-8"
             initial="initial"
             animate="animate"
@@ -202,7 +211,7 @@ function App() {
       {/* Projects Section */}
       <section className="py-20 px-6">
         <div className="container mx-auto max-w-6xl">
-          <motion.div 
+          <motion.div
             className="mb-12"
             initial="initial"
             animate="animate"
@@ -241,7 +250,7 @@ function App() {
                 link: "https://github.com/paulcyi/serverless-url-shortener"
               }
             ].map((project, index) => (
-              <motion.div 
+              <motion.div
                 key={index}
                 className="bg-white dark:bg-[#1E1E1E] rounded-lg shadow-lg dark:shadow-black/20 dark:border dark:border-[#2C2C2C] overflow-hidden h-full hover:dark:bg-[#252525] transition-colors duration-300"
                 initial="rest"
@@ -265,14 +274,18 @@ function App() {
                       </motion.div>
                     ))}
                   </div>
-                  <a 
+                  <motion.a
                     href={project.link}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="inline-flex items-center text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 transition-colors duration-300"
+                    initial="rest"
+                    whileHover="hover"
+                    animate="rest"
+                    variants={buttonHover}
                   >
                     View Project <ExternalLink size={16} className="ml-2" />
-                  </a>
+                  </motion.a>
                 </div>
               </motion.div>
             ))}
@@ -283,7 +296,7 @@ function App() {
       {/* Contact Section */}
       <section className="py-20 bg-gray-50 dark:bg-[#181818]">
         <div className="container mx-auto px-6 max-w-6xl">
-          <motion.div 
+          <motion.div
             className="text-center mb-12"
             initial="initial"
             animate="animate"
@@ -301,12 +314,46 @@ function App() {
               animate="animate"
               variants={fadeIn}
             >
-              <motion.a 
+              <motion.a
                 href="mailto:yipaulc@gmail.com"
-                className="w-full sm:w-[200px] flex items-center justify-center gap-2 px-6 py-3 bg-gray-900 dark:bg-white text-white dark:text-[#121212] rounded-lg hover:shadow-lg dark:hover:shadow-white/10 transition-all duration-300"
+                className="w-full sm:w-[200px] flex items-center justify-center gap-2 px-6 py-3 bg-gray-900 dark:bg-white text-white dark:text-[#121212] rounded-lg hover:bg-gray-800 dark:hover:bg-gray-100 transition-colors"
                 initial="rest"
                 whileHover="hover"
                 animate="rest"
                 variants={buttonHover}
               >
                 <Mail size={20} />
+                Email Me
+              </motion.a>
+              <motion.button
+                onClick={handleDownloadResume}
+                className="w-full sm:w-[200px] flex items-center justify-center gap-2 px-6 py-3 border-2 border-gray-900 dark:border-white text-gray-900 dark:text-white rounded-lg hover:bg-gray-100 dark:hover:bg-[#1E1E1E] transition-colors"
+                initial="rest"
+                whileHover="hover"
+                animate="rest"
+                variants={buttonHover}
+              >
+                <Download size={20} />
+                Download Resume
+              </motion.button>
+            </motion.div>
+            {downloadError && (
+              <p className="text-red-500 dark:text-red-400">{downloadError}</p>
+            )}
+          </div>
+        </div>
+      </section>
+
+      {/* Footer */}
+      <footer className="bg-gray-50 dark:bg-[#181818] py-12">
+        <div className="container mx-auto px-6 text-center">
+          <p className="text-gray-600 dark:text-gray-300">
+            © 2025 Paul Yi. All rights reserved.
+          </p>
+        </div>
+      </footer>
+    </div>
+  );
+}
+
+export default App;
