@@ -236,7 +236,7 @@ function App() {
               variants={fadeIn}
             >
               <a
-                href="mailto:contact@paulyi.dev"
+                href="mailto:yipaulc@gmail.com"
                 className="w-full sm:w-[200px] flex items-center justify-center gap-2 px-6 py-3 bg-gray-900 dark:bg-white text-white dark:text-gray-900 rounded-lg hover:bg-gray-800 dark:hover:bg-gray-100 transition-colors"
               >
                 <Mail size={20} />
